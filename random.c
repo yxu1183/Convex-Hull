@@ -3,13 +3,14 @@
     Student ID: 1001631183
 
     Generated random coordinates:
-        -> Any number and range of random coordinates can be         generated.
+        -> Any number and range of random coordinates can be generated.
         -> Generated coordinates are then written onto the file.
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 
+//Funtion to generate random coordinates and write onto the file
 void generate_random_file(int size,int max_range);
 
 int main (int argc, char *argv[])
@@ -17,7 +18,8 @@ int main (int argc, char *argv[])
     int size = atoi(argv[1]);
     int max_range = atoi(argv[2]);
 
-    if (argc < 3)
+    //Checks if total number of arguments is 3 or not
+    if (argc < 3 || argc > 3)
     {
         printf("Error: Please provide an integer number of a data size followed by maximum range of the data as arguments.\n");
         printf("Example: ./a.out 10 100\n");
@@ -38,14 +40,15 @@ void generate_random_file(int size, int max_range)
     FILE *fp;
     fp = fopen("random.txt","w");
 
-    // if(fp == NULL)
-    // {
-    //     printf("Error\n");
-    //     exit(EXIT_FAILURE);
-    // }
+    if(fp == NULL)
+    {
+        printf("Error\n");
+        exit(EXIT_FAILURE);
+    }
 
     fprintf(fp, "%d\n",size);
 
+    //Generate random coordinates
     for(i = 0; i < size; i++)
     {
         x = rand() % max_range;

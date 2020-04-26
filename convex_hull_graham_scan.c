@@ -16,7 +16,7 @@ typedef struct Point
 {
     int x;
     int y;
-}Point;
+} Point;
 
 Point P0;
 
@@ -29,9 +29,9 @@ bool tie_case(int y_min, int y, int x, int x_min)
 {
     bool flag = false;
 
-    if(y_min == y)
+    if (y_min == y)
     {
-        if(x < x_min)
+        if (x < x_min)
         {
             flag = true;
         }
@@ -46,15 +46,15 @@ int min_y(int total_points, Point points[total_points])
 {
     int bottom_y = points[0].y;
     int i = 1;
-    while(i < total_points)
+    while (i < total_points)
     {
         int point_y = points[i].y;
         /*
             Takes into consideration the tie-case: if there are same minimum y-value, 
             it will return the left-most one.
         */
-        bool tie = tie_case(bottom_y,point_y,points[i].x,points[minimum_index].x);
-        if((point_y < bottom_y) || (tie == true))
+        bool tie = tie_case(bottom_y, point_y, points[i].x, points[minimum_index].x);
+        if ((point_y < bottom_y) || (tie == true))
         {
             bottom_y = points[i].y;
             minimum_index = i;
@@ -88,9 +88,9 @@ int find_orientation(Point p0, Point p1, Point p2)
            then the segment p0p1 lies counterclockwise from p0p2
         -> it it returns 0, then they are collinear.
     */
-    int cross_product = (p1.y - p0.y) * (p2.x - p1.x) - 
+    int cross_product = (p1.y - p0.y) * (p2.x - p1.x) -
                         (p1.x - p0.x) * (p2.y - p1.y);
-    if (cross_product == 0) 
+    if (cross_product == 0)
     {
         return 0;
     }
@@ -113,16 +113,16 @@ int find_orientation(Point p0, Point p1, Point p2)
 */
 int greater_distance(Point p1, Point p2, Point p3)
 {
-    int first_distance = (p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y); 
-    int second_distance = (p1.x - p3.x)*(p1.x - p3.x) + (p1.y - p3.y)*(p1.y - p3.y);
-    if(first_distance >= second_distance)
+    int first_distance = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+    int second_distance = (p1.x - p3.x) * (p1.x - p3.x) + (p1.y - p3.y) * (p1.y - p3.y);
+    if (first_distance >= second_distance)
     {
         return -1;
     }
     else
     {
         return 1;
-    }  
+    }
 }
 
 /*
@@ -133,70 +133,102 @@ int compare_coordinates(const void *p, const void *q)
     Point *P1 = (Point *)p;
     Point *P2 = (Point *)q;
 
-    int orint = find_orientation(P0,*P1,*P2);
-    if(orint == 0)
+    int orint = find_orientation(P0, *P1, *P2);
+    if (orint == 0)
     {
-        return greater_distance(P0,*P2,*P1);
+        return greater_distance(P0, *P2, *P1);
     }
-    if(orint == -1)
+    if (orint == -1)
     {
         return -1;
     }
     else
     {
         return 1;
-    }  
+    }
+}
+
+/*
+    This function checks if more than one point has 
+    same orientation,so that we could get the farthest point.
+    It also updates the size of the array.
+*/
+int check_orientation(int total, Point points[total])
+{
+    //Initialize the new size of our array
+    int new_size = 1;
+    int counter = 1;
+    while (counter < total)
+    {
+        //Go through all the points until we find the points in same angle
+        //w.r.t PO and keep the farthest one
+        while (counter < total - 1 && find_orientation(P0, points[counter], points[counter + 1]) == 0)
+        {
+            counter++;
+        }
+        points[new_size] = points[counter];
+        //Update the new size of our array 
+        new_size = new_size + 1;
+        counter = counter + 1;
+    }
+    return new_size;
 }
 
 void convexHull(int total_points, Point points[total_points])
 {
     //Finds the coordinate with minimum y-value.
-    int bottom_y = min_y(total_points,points);
+    int bottom_y = min_y(total_points, points);
     //Swap the coordinate with minimum y-value to the first place.
-    swap_bottom(total_points, points,0,minimum_index);
-    
+    swap_bottom(total_points, points, 0, minimum_index);
+
     //Sort (total_points-1) with respect to the first point.
     //We are sorting the points in counterclockwise direction,
     //i.e if point P2 has larger polar angle than the point p1, point p1 comes before pont P2
     P0 = points[0];
-    qsort(&points[1],total_points-1,sizeof(Point),compare_coordinates);
+    qsort(&points[1], total_points - 1, sizeof(Point), compare_coordinates);
+
+    //Next we check if one or more have same orientation (polar anggle) with P0.
+    //We remove all and keep the one that is farthest from P0.
+    //Then, we update the size of our array.
+    int updated_size = check_orientation(total_points, points);
+    printf("%d\n",updated_size);
 }
 
 int main()
 {
     int i = 0;
-    int total_points = 0;;
+    int total_points = 0;
+    ;
     printf("\nEnter total points you want to check for: ");
-    scanf("%d",&total_points);
+    scanf("%d", &total_points);
     Point arr_points[total_points];
     printf("\nEnter two numbers separated by a space for (e.g.: 10 15):\nStop with: 0 0\n");
-    for(i = 0; i < total_points; i++)
+    for (i = 0; i < total_points; i++)
     {
-        scanf("%d %d",&arr_points[i].x,&arr_points[i].y);
+        scanf("%d %d", &arr_points[i].x, &arr_points[i].y);
 
-        if(arr_points[i].x == 0 && arr_points[i].y == 0)
+        if (arr_points[i].x == 0 && arr_points[i].y == 0)
         {
             break;
         }
         else
         {
-
         }
     }
 
     printf("Printing all the points to compute convex hall.\n");
     printf(" x\t y\n");
-    for(i = 0; i < total_points; i++)
+    for (i = 0; i < total_points; i++)
     {
-        printf("%d\t%d\n",arr_points[i].x,arr_points[i].y);
+        printf("%d\t%d\n", arr_points[i].x, arr_points[i].y);
     }
 
-    convexHull(total_points,arr_points);
+    convexHull(total_points, arr_points);
 
-    printf(" x\t y\n");
-    for(i = 0; i < total_points; i++)
-    {
-        printf("%d\t%d\n",arr_points[i].x,arr_points[i].y);
-    }
+    // printf(" x\t y\n");
+    // for(i = 0; i < total_points; i++)
+    // {
+    //     printf("%d\t%d\n",arr_points[i].x,arr_points[i].y);
+    // }
     return 0;
 }

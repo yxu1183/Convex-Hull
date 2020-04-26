@@ -81,31 +81,31 @@ void swap_bottom(int total, Point points[total], int first_index, int second_ind
 int find_orientation(Point p0, Point p1, Point p2)
 {
     /*
-        -> Used formula: (p1 - p0) * (p2 - p0)
+        -> Used formula: (p1 - p0) * (p2 - p1)
         -> if it returns postive (1), and our current vector is p0p1,
            then the segement p0p1 lies clockwise from p0p2 
         -> if it returns negative (-1), and our current vector is p0p1,
            then the segment p0p1 lies counterclockwise from p0p2
         -> it it returns 0, then they are collinear.
     */
-    int cross_product = (p1.x - p0.x)*(p2.y - p0.y)-
-                        (p2.x - p0.x)*(p1.y - p0.y);
-    return cross_product;
-}
-
-int greater_distance(Point p0, Point p1, Point p2)
-{
-    int first_distance = (p1.x - p0.x)*(p1.x - p0.x) + (p1.y - p0.y)*(p1.y - p0.y);
-    int second_distance = (p2.x - p0.x)*(p2.x - p0.x) + (p2.y - p0.y)*(p2.y - p0.y);
-
-    if(first_distance < second_distance)
-    {
-        return -1;
-    }
-    else
+    int cross_product = (p1.y - p0.y) * (p2.x - p1.x) - 
+                        (p1.x - p0.x) * (p2.y - p1.y);
+    if (cross_product == 0) return 0;
+    if (cross_product > 0)
     {
         return 1;
     }
+    else
+    {
+        return 2;
+    }
+    
+}
+
+int greater_distance(Point p1, Point p2)
+{
+    return (p1.x - p2.x)*(p1.x - p2.x) + 
+          (p1.y - p2.y)*(p1.y - p2.y); 
 }
 
 int compare_coordinates(const void *p, const void *q)
@@ -116,9 +116,17 @@ int compare_coordinates(const void *p, const void *q)
     int orint = find_orientation(P0,*P1,*P2);
     if(orint == 0)
     {
-        return greater_distance(P0,*P1,*P2);
+        if(greater_distance(P0, *P2) >= greater_distance(P0, *P1))
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+        
     }
-    if(orint == 1)
+    if(orint == 2)
     {
         return -1;
     }
@@ -180,4 +188,3 @@ int main()
     }
     return 0;
 }
-

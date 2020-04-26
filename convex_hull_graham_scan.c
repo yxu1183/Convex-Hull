@@ -90,22 +90,33 @@ int find_orientation(Point p0, Point p1, Point p2)
     */
     int cross_product = (p1.y - p0.y) * (p2.x - p1.x) - 
                         (p1.x - p0.x) * (p2.y - p1.y);
-    if (cross_product == 0) return 0;
-    if (cross_product > 0)
+    if (cross_product == 0) 
+    {
+        return 0;
+    }
+    else if (cross_product > 0)
     {
         return 1;
     }
     else
     {
-        return 2;
+        return -1;
     }
-    
 }
 
-int greater_distance(Point p1, Point p2)
+int greater_distance(Point p1, Point p2, Point p3)
 {
-    return (p1.x - p2.x)*(p1.x - p2.x) + 
-          (p1.y - p2.y)*(p1.y - p2.y); 
+    int first_distance = (p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y); 
+    int second_distance = (p1.x - p3.x)*(p1.x - p3.x) + (p1.y - p3.y)*(p1.y - p3.y);
+    if(first_distance >= second_distance)
+    {
+        return -1;
+    }
+    else
+    {
+        return 1;
+    }
+    
 }
 
 int compare_coordinates(const void *p, const void *q)
@@ -116,17 +127,9 @@ int compare_coordinates(const void *p, const void *q)
     int orint = find_orientation(P0,*P1,*P2);
     if(orint == 0)
     {
-        if(greater_distance(P0, *P2) >= greater_distance(P0, *P1))
-        {
-            return -1;
-        }
-        else
-        {
-            return 1;
-        }
-        
+        return greater_distance(P0,*P2,*P1);
     }
-    if(orint == 2)
+    if(orint == -1)
     {
         return -1;
     }

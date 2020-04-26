@@ -104,6 +104,13 @@ int find_orientation(Point p0, Point p1, Point p2)
     }
 }
 
+/*
+    This function finds the distance between two points, lets
+    say if point p1 is fixed, then it computes distances p1p2 & p1p3
+    Returns:
+    -> -1 for the highest distance.
+    -> 1 for shortest distance.
+*/
 int greater_distance(Point p1, Point p2, Point p3)
 {
     int first_distance = (p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y); 
@@ -115,10 +122,12 @@ int greater_distance(Point p1, Point p2, Point p3)
     else
     {
         return 1;
-    }
-    
+    }  
 }
 
+/*
+    This is a compare function used by qsort function to sort an array with respect to the first point (P0).
+*/
 int compare_coordinates(const void *p, const void *q)
 {
     Point *P1 = (Point *)p;

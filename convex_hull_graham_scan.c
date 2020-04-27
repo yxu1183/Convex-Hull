@@ -255,7 +255,7 @@ void convexHull(int total_points, Point points[total_points])
 
     //Display my convex hall points.
     printf("\n");
-    printf("Following vertices form the convex hull.\n");
+    printf("Following vertices form the convex hull:\n");
     printf(" x\t y\n");
     print();
 }
@@ -264,6 +264,7 @@ int main()
 {
     int i = 0;
     int total_points = 0;
+
     //Takes the input from the file as well as user inputed points
     printf("\nEnter total points you want to check for: ");
     scanf("%d", &total_points);
@@ -273,6 +274,7 @@ int main()
     {
         scanf("%d %d", &arr_points[i].x, &arr_points[i].y);
     }
+
     //Print all original points.
     printf("\nPrinting all the points to compute convex hall.\n");
     printf(" x\t y\n");
@@ -280,6 +282,15 @@ int main()
     {
         printf("%d\t%d\n", arr_points[i].x, arr_points[i].y);
     }
+    
+    //Writes all input points onto the file.
+    FILE *fp = fopen("input_points.txt","w");
+    fprintf(fp,"%d\n",total_points);
+    for(i = 0; i <total_points; i++)
+    {
+        fprintf(fp,"%d\t%d\n",arr_points[i].x,arr_points[i].y);
+    }
+    fclose(fp);
 
     //Compute all the vertices for convex hall.
     convexHull(total_points, arr_points);

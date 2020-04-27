@@ -42,7 +42,11 @@ Point P0;
 //My struct point stack to push and pop the points.
 struct Point stack[MAX_POINTS];
 
-//This function returns true if there are two tie y-values.
+/*
+    This function returns true if there are two tie y-values.
+    Time complexity: θ(1)
+    There are no loops and each statement takes exactly 1 time. So, the time complexity is a constant.
+*/
 bool tie_case(int y_min, int y, int x, int x_min)
 {
     bool flag = false;
@@ -57,7 +61,11 @@ bool tie_case(int y_min, int y, int x, int x_min)
     return flag;
 }
 
-//Finds the point with minimum y-coordinate.
+/*
+    This function finds the point with minimum y-coordinate.
+    Time Complexity: θ(total_points)
+    There is one while loop which runs up to maximum of total_points and is increamented by one each time.
+*/
 int min_y(int total_points, Point points[total_points])
 {
     int bottom_y = points[0].y;
@@ -81,7 +89,9 @@ int min_y(int total_points, Point points[total_points])
 }
 
 /*
-    Swaps the bottom most point to the first position
+    This function swaps the bottom most point to the first position
+    Time complexity: θ(1)
+    There are no loops and each statement takes exactly 1 time. So, the time complexity is a constant.
 */
 void swap_bottom(int total, Point points[total], int first_index, int second_index)
 {
@@ -93,6 +103,8 @@ void swap_bottom(int total, Point points[total], int first_index, int second_ind
 /*
     Inorder to find the orientation, we calculate the 
     cross product of the ordered triplets(p0,p1,p2).
+    Time complexity: θ(1)
+    There are no loops and each statement takes exactly 1 time. So, the time complexity is a constant.
 */
 int find_orientation(Point p0, Point p1, Point p2)
 {
@@ -126,6 +138,8 @@ int find_orientation(Point p0, Point p1, Point p2)
     Returns:
     -> -1 for the highest distance.
     -> 1 for shortest distance.
+    Time complexity: θ(1)
+    There are no loops and each statement takes exactly 1 time. So, the time complexity is a constant.
 */
 int greater_distance(Point p1, Point p2, Point p3)
 {
@@ -143,6 +157,8 @@ int greater_distance(Point p1, Point p2, Point p3)
 
 /*
     This is a compare function used by qsort function to sort an array with respect to the first point (P0).
+    Time complexity: θ(1)
+    There are no loops and each statement takes exactly 1 time. So, the time complexity is a constant.
 */
 int compare_coordinates(const void *p, const void *q)
 {
@@ -168,6 +184,9 @@ int compare_coordinates(const void *p, const void *q)
     This function checks if more than one point has 
     same orientation,so that we could get the farthest point.
     It also updates the size of the array.
+    Time Complexity: θ(total^2)
+    There are two while loops: one runs till total and the other runs till total-1, 
+    making it θ(total(total-1)) = θ(total^2).
 */
 int check_orientation(int total, Point points[total])
 {
@@ -190,20 +209,32 @@ int check_orientation(int total, Point points[total])
     return new_size;
 }
 
-//Push the points onto the stack
+/*
+    Push the points onto the stack
+    Time complexity: θ(1)
+    There are no loops and each statement takes exactly 1 time. So, the time complexity is a constant.
+*/
 void push(Point P)
 {
     size = size + 1;
     stack[size] = P;
 }
 
-//Pop the points out of the stack
+/*
+    Pop the points out of the stack
+    Time complexity: θ(1)
+    There are no loops and each statement takes exactly 1 time. So, the time complexity is a constant.
+*/
 void pop()
 {
     size = size - 1;
 }
 
-//Display all my convex hull points.
+/*
+    Display all my convex hull points.
+    Time complexity: θ(size)
+    There is one for loop which runs till size and increases one at a time. 
+*/
 void print()
 {
     int i = 0;
@@ -231,6 +262,17 @@ void print()
     ->      POP(S) 
     -> PUSH(p[i],S)
     -> return S 
+*/
+/*
+    Time Complexity: O(nLogn), if total_points = n
+    Explanation:
+    -> Finding the first element takes at most O(n).
+    -> Sortng the points takes at most O(nLogn) - since we are using quick sort.
+    -> Pushing and poping the points take at most O(1).
+    -> To process the coodinates one by one would take at most O(n).
+    -> Printing the convex hull coordinates takes O(n).
+    -> Writing the coordinates onto the files takes O(n).
+    -> So, Total time complexity = O(n) + O(nLogn) + O(1) + O(n) + O(n) + O(n) = O(nLogn).
 */
 void convexHull(int total_points, Point points[total_points])
 {

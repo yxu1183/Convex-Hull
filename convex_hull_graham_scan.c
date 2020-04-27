@@ -1,4 +1,9 @@
 /*
+    Name: Yunika Upadhayaya
+    Student ID: 1001631183
+*/
+
+/*
     -> We are usng graham's scan to solve the convex hall problem, 
        graham's scan solves it by mainting a stack of  S of all the points.
     -> It pushes each point of the input set onto the stack one time,
@@ -230,11 +235,15 @@ void convexHull(int total_points, Point points[total_points])
     {
         return;
     }
+
+    //We push our first three points onto the stack created before.
     push(points[0]);
     push(points[1]);
     push(points[2]);
-    int i = 1;
 
+    //We will keep removing the top if the angle formed by the points:
+    //after-top, top and points[i] makes a right turn.
+    int i = 1;
     for(i = 3; i <updated_size; i++)
     {
         while(find_orientation(stack[size-1],stack[size],points[i])>-1)
@@ -243,8 +252,11 @@ void convexHull(int total_points, Point points[total_points])
         }
         push(points[i]);
     }
+
+    //Display my convex hall points.
     printf("\n");
     printf("Following vertices form the convex hull.\n");
+    printf(" x\t y\n");
     print();
 }
 
@@ -252,31 +264,24 @@ int main()
 {
     int i = 0;
     int total_points = 0;
-    ;
+    //Takes the input from the file as well as user inputed points
     printf("\nEnter total points you want to check for: ");
     scanf("%d", &total_points);
     Point arr_points[total_points];
-    printf("\nEnter two numbers separated by a space for (e.g.: 10 15):\nStop with: 0 0\n");
+    printf("\nEnter two numbers separated by a space for (e.g: 10 15):\n");
     for (i = 0; i < total_points; i++)
     {
         scanf("%d %d", &arr_points[i].x, &arr_points[i].y);
-
-        if (arr_points[i].x == -1 && arr_points[i].y == -1)
-        {
-            break;
-        }
-        else
-        {
-        }
     }
-
-    printf("Printing all the points to compute convex hall.\n");
+    //Print all original points.
+    printf("\nPrinting all the points to compute convex hall.\n");
     printf(" x\t y\n");
     for (i = 0; i < total_points; i++)
     {
         printf("%d\t%d\n", arr_points[i].x, arr_points[i].y);
     }
 
+    //Compute all the vertices for convex hall.
     convexHull(total_points, arr_points);
     return 0;
 }

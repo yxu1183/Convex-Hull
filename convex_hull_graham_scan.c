@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
 /*
     -> We are usng graham's scan to solve the convex hall problem, 
        graham's scan solves it by mainting a stack of  S of all the points.
@@ -12,19 +7,37 @@
        all the convex hull in counterclock wise direction from their appearance
        of the boundary.
 */
+
+//My header files for the code
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <limits.h>
+
+//Maximum number of convex hall points that can be computed.
+#define MAX_POINTS  1000
+
+//Minimum index for the minimum y value.
+int minimum_index = 1;
+
+//Size of my stack 
+int size = -1;
+
+//A struct for my coordinates
 typedef struct Point
 {
     int x;
     int y;
-} Point;
+}Point;
 
+//A global P0 to later find the orientation with respect to this point.
 Point P0;
 
-int minimum_index = 1;
+//My struct point stack to push and pop the points.
+struct Point stack[MAX_POINTS];
 
-/*
-    This function returns true if there are two tie y-values.
-*/
+//This function returns true if there are two tie y-values.
 bool tie_case(int y_min, int y, int x, int x_min)
 {
     bool flag = false;
@@ -39,9 +52,7 @@ bool tie_case(int y_min, int y, int x, int x_min)
     return flag;
 }
 
-/*
-    Finds the point with minimum y-coordinate.
-*/
+//Finds the point with minimum y-coordinate.
 int min_y(int total_points, Point points[total_points])
 {
     int bottom_y = points[0].y;
@@ -174,6 +185,28 @@ int check_orientation(int total, Point points[total])
     return new_size;
 }
 
+//Push the points onto the stack
+void push(Point P)
+{
+    size = size + 1;
+    stack[size] = P;
+}
+
+//Pop the points out of the stack
+void pop()
+{
+    size = size - 1;
+}
+
+//Display all my convex hull points.
+void print()
+{
+    int i = 0;
+    for(i = 0; i <= size; i++)
+    {
+        printf("%d\t%d\n",stack[i].x,stack[i].y);
+    }
+}
 void convexHull(int total_points, Point points[total_points])
 {
     //Finds the coordinate with minimum y-value.
@@ -191,7 +224,28 @@ void convexHull(int total_points, Point points[total_points])
     //We remove all and keep the one that is farthest from P0.
     //Then, we update the size of our array.
     int updated_size = check_orientation(total_points, points);
-    printf("%d\n",updated_size);
+
+    //If our new size is less than 3, then we cannot find the convex hall for given points
+    if(updated_size < 3)
+    {
+        return;
+    }
+    push(points[0]);
+    push(points[1]);
+    push(points[2]);
+    int i = 1;
+
+    for(i = 3; i <updated_size; i++)
+    {
+        while(find_orientation(stack[size-1],stack[size],points[i])>-1)
+        {
+            pop();
+        }
+        push(points[i]);
+    }
+    printf("\n");
+    printf("Following vertices form the convex hull.\n");
+    print();
 }
 
 int main()
@@ -207,7 +261,7 @@ int main()
     {
         scanf("%d %d", &arr_points[i].x, &arr_points[i].y);
 
-        if (arr_points[i].x == 0 && arr_points[i].y == 0)
+        if (arr_points[i].x == -1 && arr_points[i].y == -1)
         {
             break;
         }
@@ -224,11 +278,5 @@ int main()
     }
 
     convexHull(total_points, arr_points);
-
-    // printf(" x\t y\n");
-    // for(i = 0; i < total_points; i++)
-    // {
-    //     printf("%d\t%d\n",arr_points[i].x,arr_points[i].y);
-    // }
     return 0;
 }

@@ -212,6 +212,26 @@ void print()
         printf("%d\t%d\n",stack[i].x,stack[i].y);
     }
 }
+
+/*  
+    GRAHAM-SCAN(Q) implementation:
+    PsuedoCode(From Book):
+    -> let p0 be the point inQ with the minimum y-coordinate, or the leftmost such 
+       point in case of a tie.
+    -> let (p1,p2,...pm) be the remaining points in Q, sorted by polar angle in counterclockwise 
+       order around p0 (if more than one point has the same angle, remove all but the one 
+       that is farthest from p0.
+    -> let S be an empty stack.
+    -> PUSH (p0,S)
+    -> PUSH (p1,S)
+    -> PUSH (p2,S)
+    -> for i = 3 to m 
+    ->      while the angle formed by points NEXT-TO-TOP(S),TOP(S),and p[i]
+            makes a nonleft turn 
+    ->      POP(S) 
+    -> PUSH(p[i],S)
+    -> return S 
+*/
 void convexHull(int total_points, Point points[total_points])
 {
     //Finds the coordinate with minimum y-value.
@@ -258,6 +278,15 @@ void convexHull(int total_points, Point points[total_points])
     printf("Following vertices form the convex hull:\n");
     printf(" x\t y\n");
     print();
+
+    //Writes all convex hull points onto the file.
+    FILE *fp = fopen("convex_hull_points.txt","w");
+    fprintf(fp,"%d\n",size);
+    for(i = 0; i <size; i++)
+    {
+        fprintf(fp,"%d\t%d\n",stack[i].x,stack[i].y);
+    }
+    fclose(fp);
 }
 
 int main()

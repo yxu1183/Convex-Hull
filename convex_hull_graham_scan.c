@@ -281,8 +281,8 @@ void convexHull(int total_points, Point points[total_points])
 
     //Writes all convex hull points onto the file.
     FILE *fp = fopen("convex_hull_points.txt","w");
-    fprintf(fp,"%d\n",size);
-    for(i = 0; i <size; i++)
+    fprintf(fp,"%d\n",size+1);
+    for(i = 0; i <size+1; i++)
     {
         fprintf(fp,"%d\t%d\n",stack[i].x,stack[i].y);
     }
@@ -325,3 +325,4 @@ int main()
     convexHull(total_points, arr_points);
     return 0;
 }
+

@@ -19,22 +19,22 @@ This program implements Graham's scan for convex hall of a set of points. Given 
 ## Compilation Instructions
 The application is built in an omega server at UTA.
 
-Inorder to generate the random coordinate points with size of 100 and of range(0 - 1000), in terminal:
+To generate the random coordinate points with size of 100 and of range(0 - 1000), in terminal:
 ```
 gcc -o rand random.c
 rand 100 1000
 ```
-Inorder to compute the convex hall by reading in the from the file [random.txt](https://github.com/yxu1183/Convex-Hull/blob/master/random.txt), in terminal:
+To compute the convex hall by reading in the from the file [random.txt](https://github.com/yxu1183/Convex-Hull/blob/master/random.txt), in terminal:
 ```
 gcc convex_hull_graham_scan.c
 ./a.out < random.txt
 ```
-Inorder to compute the convex hall by redirection of input from the keyboard, in terminal:
+To compute the convex hall by redirection of input from the keyboard, in terminal:
 ```
 gcc convex_hull_graham_scan.c
 ./a.out
 ```
-Inorder to check for memory leaks and error, in terminal:
+To check for memory leaks and error, in terminal:
 ```
 gcc convex_hull_graham_scan.c
 valgrind --leak-check=full ./a.out < random.txt
